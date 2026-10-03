@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ProTin | Healthy Food Delivered</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            color: #222;
+        }
+
+        /* ================= HEADER ================= */
+
+        header {
+            height: 72px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 800;
+            color: #e23744;
+        }
+
+        .logo span {
+            color: #222;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .login-btn {
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .cart-btn {
+            background: #e23744;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            min-height: 400px;
+            background: linear-gradient(
+                rgba(0,0,0,0.55),
+                rgba(0,0,0,0.55)
+            ),
+            url("https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1600&q=80");
+
+            background-size: cover;
+            background-position: center;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 10px;
+            padding: 5px;
+            display: flex;
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        .search-box button {
+            border: none;
+            background: #e23744;
+            color: white;
+            padding: 0 25px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* ================= CATEGORIES ================= */
+
+        .section {
+            padding: 45px 6%;
+        }
+
+        .section-title {
+            font-size: 30px;
+            margin-bottom: 25px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .category {
+            min-width: 130px;
+            padding: 18px;
+            background: white;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-icon {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        /* ================= PRODUCTS ================= */
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+
+        .product-content {
+            padding: 18px;
+        }
+
+        .product-category {
+            color: #e23744;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .product h3 {
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 42px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .product-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .add-btn,
+        .buy-btn {
+            flex: 1;
+            padding: 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            border: 1px solid #e23744;
+            background: white;
+            color: #e23744;
+        }
+
+        .buy-btn {
+            border: none;
+            background: #e23744;
+            color: white;
+        }
+
+        /* ================= CART ================= */
+
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
+        }
+
+        .cart {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 420px;
+            max-width: 100%;
+            background: white;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .close {
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+
+        .cart-item img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-info {
+            flex: 1;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .quantity button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: #eee;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            margin-top: 25px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #e23744;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* ================= MODAL ================= */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            width: 430px;
+            max-width: 100%;
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            margin-bottom: 13px;
+            outline: none;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: #e23744;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            background: #222;
+            color: white;
+            padding: 45px 6%;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        footer h2 {
+            color: #e23744;
+            margin-bottom: 15px;
+        }
+
+        footer p {
+            color: #bbb;
+            line-height: 1.8;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media(max-width: 768px) {
+
+            header {
+                padding: 0 4%;
+            }
+
+            .location {
+                display: none;
+            }
+
+            .header-actions {
+                gap: 10px;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+            .section {
+                padding: 35px 4%;
+            }
+
+            .section-title {
+                font-size: 25px;
+            }
+
+            .cart {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <div class="logo">
+        Pro<span>Tin</span>
+    </div>
+
+    <div class="location">
+        📍 <span id="locationText">Add delivery location</span>
+    </div>
+
+    <div class="header-actions">
+
+        <button class="login-btn" onclick="openLogin()">
+            Login
+        </button>
+
+        <button class="cart-btn" onclick="openCart()">
+            🛒 Cart <span id="cartCount">0</span>
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>Eat Better. Live Better.</h1>
+
+        <p>
+            Healthy meals, protein-rich food and fresh drinks delivered to you.
+        </p>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search meals, smoothies, juices..."
+                onkeyup="searchProducts()"
+            >
+
+            <button onclick="searchProducts()">
+                Search
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CATEGORIES ================= -->
+
+<section class="section">
+
+    <h2 class="section-title">
+        Explore Categories
+    </h2>
+
+    <div class="categories">
+
+        <div class="category" onclick="filterCategory('all')">
+            <div class="category-icon">🍽️</div>
+            <b>All</b>
+        </div>
+
+        <div class="category" onclick="filterCategory('peanut')">
+            <div class="category-icon">🥜</div>
+            <b>Peanut Butter</b>
+        </div>
+
+        <div class="category" onclick="filterCategory('veg')">
+            <div class="category-icon">🥗</div>
+            <b>Veg Meals</b>
+        </div>
+
+        <div class="category" onclick="filterCategory('nonveg')">
+            <div class="category-icon">🍗</div>
+            <b>Non-Veg</b>
+        </div>
+
+        <div class="category" onclick="filterCategory('smoothie')">
+            <div class="category-icon">🥤</div>
+            <b>Smoothies</b>
+        </div>
+
+        <div class="category" onclick="filterCategory('juice')">
+            <div class="category-icon">🍹</div>
+            <b>Fresh Juice</b>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PRODUCTS ================= -->
+
+<section class="section">
+
+    <h2 class="section-title">
+        ProTin Menu
+    </h2>
+
+    <div class="products" id="productsContainer"></div>
+
+</section>
+
+
+<!-- ================= CART ================= -->
+
+<div class="cart-overlay" id="cartOverlay">
+
+    <div class="cart">
+
+        <div class="cart-header">
+
+            <h2>Your Cart</h2>
+
+            <span class="close" onclick="closeCart()">
+                ×
+            </span>
+
+        </div>
+
+        <div id="cartItems"></div>
+
+        <div class="cart-total">
+            Total: ₹<span id="cartTotal">0</span>
+        </div>
+
+        <button
+            class="checkout-btn"
+            onclick="openCheckout()"
+        >
+            Proceed to Checkout
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= LOGIN MODAL ================= -->
+
+<div class="modal" id="loginModal">
+
+    <div class="modal-box">
+
+        <span class="modal-close" onclick="closeLogin()">
+            ×
+        </span>
+
+        <h2>Login to ProTin</h2>
+
+        <p style="color:#777;margin-bottom:20px;">
+            Enter your mobile number to continue.
+        </p>
+
+        <input
+            class="input"
+            type="tel"
+            maxlength="10"
+            placeholder="Mobile Number"
+            id="mobileNumber"
+        >
+
+        <button
+            class="modal-btn"
+            onclick="loginUser()"
+        >
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CHECKOUT MODAL ================= -->
+
+<div class="modal" id="checkoutModal">
+
+    <div class="modal-box">
+
+        <span class="modal-close" onclick="closeCheckout()">
+            ×
+        </span>
+
+        <h2>Delivery Details</h2>
+
+        <input
+            class="input"
+            id="customerName"
+            placeholder="Full Name"
+        >
+
+        <input
+            class="input"
+            id="customerMobile"
+            type="tel"
+            maxlength="10"
+            placeholder="Mobile Number"
+        >
+
+        <textarea
+            class="input"
+            id="customerAddress"
+            rows="4"
+            placeholder="Complete Delivery Address"
+        ></textarea>
+
+        <input
+            class="input"
+            id="customerPincode"
+            placeholder="Pincode"
+        >
+
+        <button
+            class="modal-btn"
+            onclick="placeOrder()"
+        >
+            Place Order
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-content">
+
+        <div>
+
+            <h2>ProTin</h2>
+
+            <p>
+                Healthy food made simple.
+                Protein-rich meals, smoothies,
+                fresh juices and more.
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>Categories</h3>
+
+            <p>Diet Meals</p>
+            <p>Smoothies</p>
+            <p>Fresh Juices</p>
+            <p>Peanut Butter</p>
+
+        </div>
+
+        <div>
+
+            <h3>Contact</h3>
+
+            <p>📱 +91 XXXXX XXXXX</p>
+            <p>📧 support@protin.in</p>
+            <p>📍 Bangalore, India</p>
+
+        </div>
+
+    </div>
+
+    <div class="copyright">
+
+        © 2026 ProTin. All Rights Reserved.
+
+    </div>
+
+</footer>
+
+
+<script>
+
+/* ================= PRODUCT DATABASE ================= */
+
+const products = [
+
+    {
+        id: 1,
+        name: "ProTin Peanut Butter",
+        category: "peanut",
+        categoryName: "Peanut Butter",
+        price: 299,
+        image: "https://images.unsplash.com/photo-1621939514649-280e2aa7a3e4?auto=format&fit=crop&w=800&q=80",
+        description: "Creamy protein-rich peanut butter."
+    },
+
+    {
+        id: 2,
+        name: "Paneer Rice Bowl",
+        category: "veg",
+        categoryName: "Veg Diet Meal",
+        price: 179,
+        image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80",
+        description: "Protein-rich paneer with healthy rice and vegetables."
+    },
+
+    {
+        id: 3,
+        name: "Paneer Salad",
+        category: "veg",
+        categoryName: "Veg Diet Meal",
+        price: 169,
+        image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+        description: "Fresh vegetables with protein-rich paneer."
+    },
+
+    {
+        id: 4,
+        name: "Tofu Rice Bowl",
+        category: "veg",
+        categoryName: "Veg Diet Meal",
+        price: 169,
+        image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80",
+        description: "Healthy tofu rice bowl packed with protein."
+    },
+
+    {
+        id: 5,
+        name: "Soya Chunks Rice Bowl",
+        category: "veg",
+        categoryName: "Veg Diet Meal",
+        price: 159,
+        image: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=800&q=80",
+        description: "High-protein soya chunks with rice."
+    },
+
+    {
+        id: 6,
+        name: "Chicken Rice Bowl",
+        category: "nonveg",
+        categoryName: "Non-Veg Diet Meal",
+        price: 219,
+        image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80",
+        description: "Lean chicken with rice and vegetables."
+    },
+
+    {
+        id: 7,
+        name: "Chicken Salad",
+        category: "nonveg",
+        categoryName: "Non-Veg Diet Meal",
+        price: 209,
+        image: "https://images.unsplash.com/photo-1546069901-d5bfd2cbfb1f?auto=format&fit=crop&w=800&q=80",
+        description: "Fresh salad with protein-rich chicken."
+    },
+
+    {
+        id: 8,
+        name: "Oats Smoothie",
+        category: "smoothie",
+        categoryName: "Smoothie",
+        price: 149,
+        image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80",
+        description: "Creamy oats smoothie for a healthy start."
+    },
+
+    {
+        id: 9,
+        name: "Fruit Smoothie",
+        category: "smoothie",
+        categoryName: "Smoothie",
+        price: 159,
+        image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=80",
+        description: "Fresh seasonal fruits blended into a smoothie."
+    },
+
+    {
+        id: 10,
+        name: "Dry Fruit Smoothie",
+        category: "smoothie",
+        categoryName: "Smoothie",
+        price: 189,
+        image: "https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=800&q=80",
+        description: "Nutritious smoothie loaded with dry fruits."
+    },
+
+    {
+        id: 11,
+        name: "Oats + Fruits + Dry Fruits Smoothie",
+        category: "smoothie",
+        categoryName: "Premium Smoothie",
+        price: 219,
+        image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80",
+        description: "Complete smoothie with oats, fruits and dry fruits."
+    },
+
+    {
+        id: 12,
+        name: "Watermelon Juice",
+        category: "juice",
+        categoryName: "Fresh Juice",
+        price: 99,
+        image: "https://images.unsplash.com/photo-1529059997568-3d847b1154f0?auto=format&fit=crop&w=800&q=80",
+        description: "Freshly prepared watermelon juice."
+    },
+
+    {
+        id: 13,
+        name: "Pineapple Juice",
+        category: "juice",
+        categoryName: "Fresh Juice",
+        price: 109,
+        image: "https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&
